@@ -3,7 +3,10 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -42,8 +45,9 @@ public class DetailActivity extends AppCompatActivity {
             closeOnError();
             return;
         }
+        Log.d("sandwich", sandwich.toString());
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +60,26 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        // grab the TextViews
+        TextView alsoKnownAs = findViewById(R.id.also_known_tv);
+        TextView ingredients = findViewById(R.id.ingredients_tv);
+        TextView origin = findViewById(R.id.origin_tv);
+        TextView description = findViewById(R.id.description_tv);
+
+        // Join the list of names into one string and add to the textview
+        String otherNames = TextUtils.join(", ", sandwich.getAlsoKnownAs());
+        // Requires SDK 26:  String.join(", ", sandwich.getAlsoKnownAs());
+        alsoKnownAs.setText(otherNames);
+
+        // Join the list of ingredients into one string and add to the textview
+        String listIngredients = TextUtils.join(", ", sandwich.getIngredients());
+        //String.join(", ", sandwich.getIngredients());
+        ingredients.setText(listIngredients);
+
+        // Add the origin and description to their textviews
+        origin.setText(sandwich.getPlaceOfOrigin());
+        description.setText(sandwich.getDescription());
 
     }
 }
